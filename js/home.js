@@ -1,6 +1,5 @@
-// js/home.mjs
 import Movie from "./movie.js";
-import { loadHeaderFooter } from "/js/utils.js";
+import { loadHeaderFooter } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     loadHeaderFooter();
