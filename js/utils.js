@@ -1,4 +1,3 @@
-// js/utils.mjs
 export function qs(selector, parent = document) {
   return parent.querySelector(selector);
 }
@@ -15,9 +14,9 @@ export function renderWithTemplate(template, container) {
 
 export function loadHeaderFooter() {
   return Promise.all([
-    loadTemplate("../partials/header.html")
+    loadTemplate("./partials/header.html")
       .then((template) => renderWithTemplate(template, qs("#main-header"))),
-    loadTemplate("../partials/footer.html")
+    loadTemplate("./partials/footer.html")
       .then((template) => renderWithTemplate(template, qs("#main-footer")))
   ])
     //after header and footer are loaded, setup the hamburger menu
