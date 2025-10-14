@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineScope | Home</title>
+  <meta name="author" content="Alexander Mendoza">
+  <meta name="description"
+    content="CineScope is a movie and TV show discovery app that lets you explore trending titles, critics’ scores, and genres with a clean and responsive design.">
+  <link rel="icon" href="/images/logo.webp" type="image/png" sizes="32x32">
+  <link rel="stylesheet" href="styles/styles.css">
+  <script type="module" src="js/home.mjs"></script>
+</head>
+
+<body>
+  <header id="main-header"></header>
+
+  <main>
+    <div class="hero">
+      <picture>
+        <source srcset="images/hero-small.webp" media="(max-width: 600px)">
+        <img id="hero" src="images/hero.webp" alt="movies-posters" loading="lazy">
+      </picture>
+      <div class="info">
+        <h1>Discover the Magic of Movies — Experience Cinema Your Way</h1>
+        <p>Welcome to CineScope, your destination for exploring the world of film. Search by title or genre to find what
+          inspires
+          you — from new releases to timeless classics. Watch trailers, explore trending recommendations, and uncover
+          hidden gems
+          all in one place. Whether you’re a casual viewer or a true cinephile, CineScope makes discovering your next
+          favorite
+          movie simple, and fun.</p>
+        <a href="search.html" class="cta-button">Discover Now</a>
+      </div>
+    </div>
+    <div id="today-picks">
+      <h2>Today's recommendations</h2>
+      <div id="movies-container" class="movies-container"></div>
+    </div>
+  </main>
+
+  <footer id="main-footer"></footer>
+</body>
+
+</html>
