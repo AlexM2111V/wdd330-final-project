@@ -6,14 +6,14 @@ export default class Movie {
     constructor(data) {
         this.id = data.rottenTomatoesId || data.id || crypto.randomUUID();
         this.title = data.title || "Untitled";
-        this.image = data.posterImageUrl || data.image_url || "images/placeholder.png";
+        this.image = data.image || data.posterImageUrl || data.image_url || "images/placeholder.png";
         this.type = data.media_type || data.type || data.mediaType || "Movie";
         this.criticsScore = data.critics_score || data.criticsScore || data.rottenTomatoes?.criticsScore || "N/A";
-        this.releaseYear = data.releaseYear || data.year || "N/A";
-        this.rating = data.rating || "Unrated";
-        this.genres = data.genres || [];
+        this.releaseYear = data.releaseYear || data.year || data.release_date || "2000";
+        this.rating = data.rating || "G";
+        this.genres = data.genres || ["No genre available"];
         this.cast = data.castCrew?.cast || [];
-        this.description = data.description || "No description available.";
+        this.description = data.description || "No description available";
     }
 
     static async fetchTodayRecommendations() {
@@ -45,21 +45,7 @@ export default class Movie {
         return validRecommendations.map((item) => new Movie(item));
     }
 
-
-    static async searchByName(name) {
-        const response = await fetch(`https://${API_HOST}/search?query=${encodeURIComponent(name)}`, {
-            headers: {
-                "x-rapidapi-host": API_HOST,
-                "x-rapidapi-key": API_KEY,
-            },
-        });
-        const data = await response.json();
-        return data.movies.map((item) => new Movie(item));
-    }
-
     renderCard() {
-
-        console.log(this);
         const div = document.createElement("div");
         div.classList.add("movie-card");
 
@@ -73,7 +59,7 @@ export default class Movie {
     `;
         // click to go to details page
         div.addEventListener("click", () => {
-            const params = new URLSearchParams({ title: this.title });
+            const params = new URLSearchParams({ id: this.id });
             window.location.href = `details.html?${params.toString()}`;
         });
         return div;

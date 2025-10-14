@@ -21,6 +21,8 @@ header div {
   align-items: center;
   padding: 0.7rem;
   background-color: var(--secondary-color);
+  border-end-end-radius: 20px;
+  border-end-start-radius: 20px;
 }
 
 header.show {
@@ -121,6 +123,8 @@ footer {
   background-color: var(--secondary-color);
   padding: 0.6rem;
   text-align: center;
+  border-start-end-radius: 20px;
+  border-start-start-radius: 20px;
 }
 
 footer p {
@@ -243,17 +247,125 @@ h2 {
   padding-right: 10px;
 }
 
-/**************************** SEARCH FORM ******************************/
+/**************************** SEARCH PAGE ******************************/
 
-select {
-  color: #666;
+#search-title {
+  text-align: center;
+  color: var(--secondary-color);
+  margin-bottom: 2rem;
+}
+
+.search-form {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1.5rem 2rem;
+  background-color: var(--third-color);
+  color: var(--primary-color);
+  border-radius: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  font-family: 'Poppins', sans-serif;
+}
+
+.search-form fieldset {
+  border: none;
+  padding: 0;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 4px var(--secondary-color);
+}
+
+small {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: var(--secondary-color);
+  color: var(--third-color);
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.btn-submit:hover {
+  color: var(--primary-color);
+}
+
+#error {
   font-style: italic;
 }
 
-select:valid {
-  color: #000;
-  font-style: normal;
+
+/**************************** DETAILS PAGE ******************************/
+
+.movie-detail-card {
+  display: flex;
+  flex-wrap: wrap;
+  /* gap: 1.5rem; */
+  align-items: flex-start;
+  background: #111;
+  color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  max-width: 900px;
+  margin: 2rem auto;
 }
+
+
+.movie-detail-card img {
+  width: 250px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin: 0 auto;
+}
+
+.movie-info {
+  flex: 1;
+  min-width: 250px;
+  text-align: center;
+}
+
+.movie-info h2 {
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+}
+
+.movie-info p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+  display: block;
+}
+
 
 
 /******************************************************************************** DESKTOP ************************************************************************************/
@@ -343,6 +455,28 @@ header div{
     .movie-card {
       width: 100%;
       max-width: 300px;
+    }
+
+
+    .movie-detail-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      justify-items: center;
+      align-items: center;
+    }
+
+    .movie-detail-card img{
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .movie-info {
+      justify-items: center;
+    }
+
+    .movie-info h2{
+      margin-top: 1rem;
     }
 
 }

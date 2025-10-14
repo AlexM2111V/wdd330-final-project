@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         const movies = await Movie.fetchTodayRecommendations();
         const randomMovies = getRandomMovies(movies, 6);
         container.innerHTML = "";
+
+        localStorage.setItem("movies", JSON.stringify(randomMovies));
+        
         randomMovies.forEach((m) => container.appendChild(m.renderCard()));
     } catch (err) {
         console.error(err);
