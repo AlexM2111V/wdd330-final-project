@@ -59,7 +59,7 @@ export function renderItems(container, templateFn, dataArray) {
   }
 
   dataArray.forEach((item, index) => {
-    // 🧹 Clean up releaseYear if it contains extra words like "Streaming August 11, 2008"
+    // Extract only the year if releaseYear looks like "Streaming Aug 11, 2008"
     if (item.releaseYear && typeof item.releaseYear === "string" && item.releaseYear.length > 4) {
       const parts = item.releaseYear.trim().split(" ");
       item.releaseYear = parts[parts.length - 1];
@@ -120,28 +120,22 @@ export async function fetchAndRenderMovies({
     if (!response.ok) throw new Error("Failed to fetch data.");
     const data = await response.json();
 
-    // Normalize different response shapes
+    // Normalize different responses
     let items = [];
     if (data.recommendations) items = data.recommendations;
     else items = data.movie || data.movies || data.searchResults || data.movies_shows || [];
 
-    // Add genre when missing
+    // Add genre when missing (Search by Genre)
     let movies = items.map((item) => {
       if ((!item.genres || item.genres.length === 0) && genre) {
         const formattedGenre = genre.charAt(0).toUpperCase() + genre.slice(1).toLowerCase();
         item.genres = [formattedGenre];
       }
 
-      // 🧹 Clean up releaseYear here too (same logic as in details)
-      if (item.releaseYear && typeof item.releaseYear === "string" && item.releaseYear.length > 4) {
-        const parts = item.releaseYear.trim().split(" ");
-        item.releaseYear = parts[parts.length - 1];
-      }
-
       return new Movie(item);
     });
 
-    // Optional filtering by genre
+    // Filter by genre if both title and genre are provided (Search by Title + Genre)
     if (title && genre) {
       movies = movies.filter(
         (m) => m.genres && m.genres.some((g) => g.toLowerCase() === genre.toLowerCase())
@@ -156,7 +150,7 @@ export async function fetchAndRenderMovies({
     // Save clean data to localStorage
     localStorage.setItem(saveKey, JSON.stringify(validMovies));
 
-    // Render with animation index support
+    // Render movies
     renderItems(container, (movie, index) => renderFn(movie, index), validMovies);
 
   } catch (err) {

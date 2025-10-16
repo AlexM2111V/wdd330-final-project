@@ -218,71 +218,6 @@ h2 {
   margin-top: 3rem;
 }
 
-/* .movie-card {
-  background-color: var(--primary-color);
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  width: 90%;
-  position: relative;
-}
-
-.movie-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
-}
-
-.movie-card img {
-  width: 95%;
-  height: auto;
-  border-radius: 8px;
-}
-
-.movie-info p {
-  display:inline-block;
-  margin: 0;
-}
-
-.favorite-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: none;
-  border: none;
-  font-size: 2.5rem;
-  cursor: pointer;
-  color: gold;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-  transition: transform 0.2s ease;
-}
-
-.favorite-btn:hover {
-  transform: scale(1.2);
-}
-
-.favorite-btn.animate {
-  animation: pop 0.3s ease;
-}
-
-@keyframes pop {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.6);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-} */
-
 .movie-card {
   perspective: 1000px;
   width: 250px;
@@ -306,7 +241,6 @@ h2 {
   }
 }
 
-/* --- Flip container --- */
 .movie-inner {
   position: relative;
   width: 100%;
@@ -319,7 +253,6 @@ h2 {
   transform: rotateY(180deg);
 }
 
-/* --- Front --- */
 .movie-front,
 .movie-back {
   position: absolute;
@@ -330,8 +263,6 @@ h2 {
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
-
-/* --- Front side (poster only) --- */
 .movie-front img {
   width: 100%;
   height: 100%;
@@ -344,7 +275,6 @@ h2 {
   transform: scale(1.05);
 }
 
-/* --- Back side with blurred background --- */
 .movie-back {
   background-size: cover;
   background-position: center;
@@ -361,7 +291,6 @@ h2 {
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: var(--text-light);
   padding: 1rem;
   border-radius: 10px;
 }
@@ -377,7 +306,6 @@ h2 {
   font-size: 0.9rem;
 }
 
-/* --- Favorite Button on the back --- */
 .favorite-btn {
     position: absolute;
     top: 4px;
@@ -393,7 +321,6 @@ h2 {
 
 .favorite-btn:hover {
   transform: scale(1.6);
-  color: #ffda44;
 }
 
 .favorite-btn.animate {
@@ -470,6 +397,8 @@ small {
 }
 
 .btn-submit {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   padding: 0.8rem;
   background-color: var(--secondary-color);
@@ -479,11 +408,33 @@ small {
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.25s ease;
+  transition: transform 0.2s ease;
+}
+
+.btn-submit::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  animation: shimmer 2s infinite;
 }
 
 .btn-submit:hover {
+  transform: scale(1.05);
   color: var(--primary-color);
+}
+
+@keyframes shimmer {
+  0% {
+    left: -75%;
+  }
+
+  100% {
+    left: 125%;
+  }
 }
 
 #error {
@@ -496,7 +447,7 @@ small {
   justify-content: space-between;
   align-items: center;
   background-color: var(--third-color);
-  color: white;
+  color: var(--primary-color);
   padding: 10px;
   border-radius: 6px;
   height: 40px;
@@ -512,7 +463,7 @@ small {
 .alert-close {
   background: none;
   border: none;
-  color: white;
+  color: var(--primary-color);
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
@@ -532,7 +483,7 @@ small {
   flex-wrap: wrap;
   align-items: flex-start;
   background: #111;
-  color: #fff;
+  color: var(--primary-color);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -594,7 +545,7 @@ small {
       margin: 0 auto;
       padding: 1rem;
       max-width: 1100px;
-      background-color: #fff;
+      background-color: var(--primary-color);
     }
 
 

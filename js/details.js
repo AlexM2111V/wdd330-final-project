@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // 🗓️ Extract only the year if releaseYear looks like "Streaming Aug 11, 2008"
+  // Extract only the year if releaseYear looks like "Streaming Aug 11, 2008"
   let yearOnly = movieData.releaseYear;
   if (typeof yearOnly === "string" && yearOnly.length > 4) {
     const parts = yearOnly.trim().split(" ");
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   movieData.releaseYear = yearOnly;
 
-  // 🧩 Build details HTML dynamically (only showing valid info)
+  // Build details HTML dynamically (only showing valid info)
   detailsContainer.innerHTML = `
     <div class="movie-detail-card">
       <img src="${movieData.image}" alt="${movieData.title}">
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     <div id="trailer-section"><p>Loading trailer...</p></div>
   `;
 
-  // ✨ Apply staggered "fall-in" animation to details elements
+  // Apply animation to details elements
   const detailCard = detailsContainer.querySelector(".movie-detail-card");
   if (detailCard) {
     const elements = detailCard.querySelectorAll("img, h2, p");
@@ -64,7 +64,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       el.style.transition = `opacity 0.6s ease ${index * 0.15}s, transform 0.6s ease ${index * 0.15}s`;
     });
 
-    // Trigger animation
     requestAnimationFrame(() => {
       elements.forEach((el) => {
         el.style.opacity = "1";
@@ -73,7 +72,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 🎥 Fetch trailer from TMDB
+  // Fetch trailer from TMDB API
   try {
     const searchUrl = `${TMDB_BASE_URL}/search/movie?&query=${encodeURIComponent(movieData.title)}&api_key=${TMDB_API_KEY}`;
     const searchRes = await fetch(searchUrl);
@@ -86,10 +85,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       const detailsData = await detailsRes.json();
 
       const trailer = detailsData.videos?.results?.find(
-        (v) => v.type === "Trailer" || v.type === "Teaser"
+        (v) => v.type === "Trailer"
       );
 
       const trailerSection = document.getElementById("trailer-section");
+
+      console.log("Fetched trailer data:", trailer);
+      console.log("Key:", trailer?.key);
       if (trailer && trailer.key) {
         trailerSection.innerHTML = `
           <iframe 
@@ -103,7 +105,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           </iframe>
         `;
 
-        // 🕒 Fade-in effect for trailer after loading
+        // Fade-in effect for trailer after loading
         const iframe = trailerSection.querySelector("iframe");
         iframe.style.opacity = "0";
         iframe.style.transition = "opacity 0.8s ease";

@@ -27,7 +27,7 @@ export default class Movie {
         this.cast = data.castCrew?.cast || [];
         this.description = data.description || "";
 
-        // ✅ Sync favorite state with localStorage
+        // Sync favorite state with localStorage
         const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
         this.isFavorite = favorites.some(fav => fav.id === this.id);
     }
@@ -61,96 +61,12 @@ export default class Movie {
         localStorage.setItem("favorites", JSON.stringify(favorites));
     }
 
-    // renderCard() {
-    //     const div = document.createElement("div");
-    //     div.classList.add("movie-card");
-
-    //     let isFav = this.isFavorite;
-
-    //     div.innerHTML = `
-    //         <img src="${this.image}" alt="${this.title}" loading="lazy">
-    //         <div class="movie-info">
-    //             <h3>${this.title}</h3>
-    //             <p><strong>Type:</strong> ${this.type.charAt(0).toUpperCase() + this.type.slice(1)}</p>
-    //             <p><strong>Critics:</strong> ${this.criticsScore ?? "N/A"}%</p>
-    //             <button class="favorite-btn ${isFav ? 'favorited' : ''}" aria-label="Toggle favorite" data-id="${this.id}">
-    //                 ${isFav ? "⭐" : "☆"}
-    //             </button>
-    //         </div>
-    //     `;
-
-    //     // 🎬 Navigate to details page when clicking the image
-    //     div.querySelector("img").addEventListener("click", () => {
-    //         const params = new URLSearchParams({ id: this.id });
-    //         window.location.href = `details.html?${params.toString()}`;
-    //     });
-
-    //     // ⭐ Favorite button behavior
-    //     const favoriteBtn = div.querySelector(".favorite-btn");
-    //     favoriteBtn.addEventListener("click", (e) => {
-    //         e.stopPropagation();
-    //         this.toggleFavorite();
-
-    //         // Show alert depending on action
-    //         if (this.isFavorite) {
-    //             alertMessage(`${this.title} added to favorites!`);
-    //         } else {
-    //             alertMessage(`${this.title} removed from favorites.`);
-    //         }
-
-    //         isFav = this.isFavorite;
-    //         favoriteBtn.classList.toggle("favorited", isFav);
-    //         favoriteBtn.textContent = isFav ? "⭐" : "☆";
-
-    //         favoriteBtn.classList.add("animate");
-    //         setTimeout(() => favoriteBtn.classList.remove("animate"), 300);
-
-    //         // 🔄 If in favorites page, re-render after unfavoriting
-    //         if (window.location.pathname.includes("favorites.html") && !isFav) {
-    //             const container = document.querySelector("#favorites-container");
-    //             const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
-    //             container.innerHTML = "";
-    //             if (favorites.length === 0) {
-    //                 container.innerHTML = "<p>No favorites yet.</p>";
-    //             } else {
-    //                 favorites.forEach(fav => {
-    //                     const movie = new Movie(fav);
-    //                     container.appendChild(movie.renderCard());
-    //                 });
-    //             }
-    //         }
-    //     });
-
-    //     return div;
-    // }
-
     renderCard(index = 0) {
         const div = document.createElement("div");
         div.classList.add("movie-card");
-        div.style.setProperty("--delay", `${index * 0.1}s`); // staggered animation
+        div.style.setProperty("--delay", `${index * 0.1}s`);
 
         let isFav = this.isFavorite;
-
-//         div.innerHTML = `
-//     <div class="movie-inner">
-//       <div class="movie-front">
-//         <img src="${this.image}" alt="${this.title}" loading="lazy">
-//       </div>
-//       <div class="movie-back" style="background-image: url('${this.image}')">
-//         <div class="movie-overlay">
-//           <h3>${this.title}</h3>
-//           <p><strong>Type:</strong> ${this.type.charAt(0).toUpperCase() + this.type.slice(1)}</p>
-//           <p><strong>Critics:</strong> ${this.criticsScore ?? "N/A"}%</p>
-//           ${this.releaseYear ? `<p><strong>Year:</strong> ${this.releaseYear}</p>` : ""}
-//           ${this.genres?.length ? `<p><strong>Genres:</strong> ${this.genres.join(", ")}</p>` : ""}
-//           <button class="favorite-btn ${isFav ? "favorited" : ""}" aria-label="Toggle favorite" data-id="${this.id}">
-//             ${isFav ? "⭐" : "☆"}
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-        //   `;
         
         div.innerHTML = `
             <div class="movie-inner">
@@ -176,8 +92,7 @@ export default class Movie {
             </div>
             `;
 
-        // Flip card to go to details when clicking image (only if not clicking star)
-        // div.querySelector(".movie-front img").addEventListener("click", () => {
+        // Flip card to go to details when clicking image
         div.querySelector(".movie-back").addEventListener("click", () => {
             const params = new URLSearchParams({ id: this.id });
             window.location.href = `details.html?${params.toString()}`;
@@ -190,9 +105,9 @@ export default class Movie {
             this.toggleFavorite();
 
             if (this.isFavorite) {
-                alertMessage(`${this.title} added to favorites!`);
+                alertMessage(`${this.title} was added to favorites!`);
             } else {
-                alertMessage(`${this.title} removed from favorites.`);
+                alertMessage(`${this.title} was removed from favorites.`);
             }
 
             const isFavNow = this.isFavorite;

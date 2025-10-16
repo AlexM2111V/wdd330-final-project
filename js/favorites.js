@@ -25,7 +25,6 @@ function renderFavorites() {
         container.appendChild(card);
     });
 
-    // ✅ Rebind star/favorite button handlers every render
     setupRemoveFavoriteHandlers();
 }
 
@@ -34,7 +33,7 @@ function setupRemoveFavoriteHandlers() {
 
     favoriteButtons.forEach((btn) => {
         btn.addEventListener("click", (e) => {
-            e.stopPropagation(); // Prevent click bubbling to parent
+            e.stopPropagation();
             const movieId = btn.dataset.id;
             removeFavorite(movieId);
         });
