@@ -204,7 +204,7 @@ h1 {
 
 /**************************** TODAY RECOMMENDATIONS ******************************/
 
- #movies-container, #results {
+ #movies-container, #results, #favorites-container {
    grid-template-columns: 1fr;
    justify-items: center;
    row-gap: 1rem;
@@ -218,7 +218,7 @@ h2 {
   margin-top: 3rem;
 }
 
-.movie-card {
+/* .movie-card {
   background-color: var(--primary-color);
   border-radius: 8px;
   padding: 1rem;
@@ -229,6 +229,7 @@ h2 {
   align-items: center;
   text-align: center;
   width: 90%;
+  position: relative;
 }
 
 .movie-card:hover {
@@ -245,6 +246,172 @@ h2 {
 .movie-info p {
   display:inline-block;
   margin: 0;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  cursor: pointer;
+  color: gold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.2);
+}
+
+.favorite-btn.animate {
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.6);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+} */
+
+.movie-card {
+  perspective: 1000px;
+  width: 250px;
+  height: 380px;
+  position: relative;
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fadeInUp 0.15s ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Flip container --- */
+.movie-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease;
+  transform-style: preserve-3d;
+}
+
+.movie-card:hover .movie-inner {
+  transform: rotateY(180deg);
+}
+
+/* --- Front --- */
+.movie-front,
+.movie-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Front side (poster only) --- */
+.movie-front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.movie-card:hover .movie-front img {
+  transform: scale(1.05);
+}
+
+/* --- Back side with blurred background --- */
+.movie-back {
+  background-size: cover;
+  background-position: center;
+  transform: rotateY(180deg);
+  position: relative;
+}
+
+.movie-overlay {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(12px) brightness(0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--text-light);
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.movie-overlay h3 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.movie-overlay p {
+  color: var(--primary-color);
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+}
+
+/* --- Favorite Button on the back --- */
+.favorite-btn {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  cursor: pointer;
+  color: gold;
+  margin-top: 0.5rem;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.6);
+  color: #ffda44;
+}
+
+.favorite-btn.animate {
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.6);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 /**************************** SEARCH PAGE ******************************/
@@ -335,6 +502,7 @@ small {
   height: 40px;
   font-size: 16px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  margin-bottom: 0.5rem;
 }
 
 .alert-message {
@@ -353,6 +521,11 @@ small {
 
 
 /**************************** DETAILS PAGE ******************************/
+
+#movie-details p{
+  text-align: center;
+  font-style: italic;
+}
 
 .movie-detail-card {
   display: flex;
@@ -396,6 +569,22 @@ small {
   margin-bottom: 0.5rem;
 }
 
+#trailer-section {
+  margin: 1.5rem;
+  text-align: center;
+}
+
+#trailer-section iframe {
+  border-radius: 12px;
+  max-width: 100%;
+}
+
+/**************************** FAVORITES PAGE ******************************/
+
+#favorites-container p{
+  text-align: center;
+  font-style: italic;
+}
 
 /******************************************************************************** DESKTOP ************************************************************************************/
 
@@ -473,7 +662,7 @@ header div{
 
   /**************************** TODAY RECOMMENDATIONS ******************************/
 
-    #movies-container, #results {
+    #movies-container, #results, #favorites-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       max-width: 1200px;

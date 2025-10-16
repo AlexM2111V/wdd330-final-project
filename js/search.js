@@ -4,7 +4,7 @@ import { loadHeaderFooter, fetchAndRenderMovies, alertMessage } from "./utils.js
 
 document.addEventListener("DOMContentLoaded", () => {
     loadHeaderFooter();
-    alertMessage("Search for movies by title, by genre, or by both title and genre.");
+    alertMessage("Search for movies by title, by genre, or by both title and genre.", true, true);
     const form = document.querySelector("#search-form");
     const resultsContainer = document.querySelector("#results");
 

@@ -54,11 +54,17 @@ export function renderItems(container, templateFn, dataArray) {
   container.innerHTML = "";
 
   if (!Array.isArray(dataArray) || dataArray.length === 0) {
-    container.innerHTML = `<p id="error">Please enter a title or select a genre.</p>`;
+    container.innerHTML = `<p id="error">No results found.</p>`;
     return;
   }
 
   dataArray.forEach((item, index) => {
+    // 🧹 Clean up releaseYear if it contains extra words like "Streaming August 11, 2008"
+    if (item.releaseYear && typeof item.releaseYear === "string" && item.releaseYear.length > 4) {
+      const parts = item.releaseYear.trim().split(" ");
+      item.releaseYear = parts[parts.length - 1];
+    }
+
     const element = templateFn(item, index);
     if (element instanceof HTMLElement) {
       container.appendChild(element);
@@ -77,9 +83,10 @@ export async function fetchAndRenderMovies({
   genre = "",
   apiHost = "",
   apiKey = "",
-  renderFn = (movie) => movie.renderCard(),
+  renderFn = (movie, index) => movie.renderCard(index),
   saveKey = "movies",
 }) {
+  
   if (!container) {
     console.error("fetchAndRenderMovies: container is required");
     return;
@@ -88,7 +95,6 @@ export async function fetchAndRenderMovies({
   container.innerHTML = "<p>Loading...</p>";
 
   try {
-
     // Build endpoint if not explicitly provided (for search page)
     let url = endpoint;
     if (!url) {
@@ -103,7 +109,6 @@ export async function fetchAndRenderMovies({
         return;
       }
     }
-
 
     const response = await fetch(url, {
       headers: {
@@ -120,33 +125,39 @@ export async function fetchAndRenderMovies({
     if (data.recommendations) items = data.recommendations;
     else items = data.movie || data.movies || data.searchResults || data.movies_shows || [];
 
-    // Add genre when missing, when searching by genre the response doesn't include it
+    // Add genre when missing
     let movies = items.map((item) => {
       if ((!item.genres || item.genres.length === 0) && genre) {
         const formattedGenre = genre.charAt(0).toUpperCase() + genre.slice(1).toLowerCase();
         item.genres = [formattedGenre];
       }
 
+      // 🧹 Clean up releaseYear here too (same logic as in details)
+      if (item.releaseYear && typeof item.releaseYear === "string" && item.releaseYear.length > 4) {
+        const parts = item.releaseYear.trim().split(" ");
+        item.releaseYear = parts[parts.length - 1];
+      }
+
       return new Movie(item);
     });
 
-    // If user provided both title & genre, filter by genre
+    // Optional filtering by genre
     if (title && genre) {
       movies = movies.filter(
         (m) => m.genres && m.genres.some((g) => g.toLowerCase() === genre.toLowerCase())
       );
     }
 
-    // Final filtering: ensure required display fields exist
+    // Only keep valid movies for display
+    const validMovies = movies.filter(
+      (m) => m.title && m.image && m.image !== "none"
+    );
 
-    const validMovies = movies.filter((m) => m.title && m.image && m.image !== "none" && m.criticsScore !== "N/A" && m.criticsScore != null);
-
-    // Save for details page
+    // Save clean data to localStorage
     localStorage.setItem(saveKey, JSON.stringify(validMovies));
 
-    renderItems(container, (movie) => {
-      return renderFn(movie);
-    }, validMovies);
+    // Render with animation index support
+    renderItems(container, (movie, index) => renderFn(movie, index), validMovies);
 
   } catch (err) {
     console.error(err);
@@ -154,20 +165,34 @@ export async function fetchAndRenderMovies({
   }
 }
 
+  export function alertMessage(message, scroll = true, persistent = false) {
+    const main = document.querySelector("main");
+    if (!main) return;
 
-export function alertMessage(message, scroll = true, duration = 3000) {
-  const alert = document.createElement("div");
-  alert.classList.add("alert");
-  alert.innerHTML = `<span class="alert-message">${message}</span>
-      <button class="alert-close">×</button>
+    const alert = document.createElement("div");
+    alert.classList.add("alert");
+    alert.innerHTML = `
+    <span class="alert-message">${message}</span>
+    <button class="alert-close" aria-label="Close alert">×</button>
   `;
 
-  alert.addEventListener("click", function (e) {
-    if (e.target.tagName == "BUTTON") {
-      main.removeChild(this);
+    // Close button click
+    alert.addEventListener("click", (e) => {
+      if (e.target.classList.contains("alert-close")) {
+        alert.classList.add("fade-out");
+        setTimeout(() => alert.remove(), 500);
+      }
+    });
+
+    // Insert alert at top of <main>
+    main.prepend(alert);
+    if (scroll) window.scrollTo(0, 0);
+
+    // Auto-dismiss if not persistent
+    if (!persistent) {
+      setTimeout(() => {
+        alert.classList.add("fade-out");
+        setTimeout(() => alert.remove(), 500);
+      }, 3000);
     }
-  });
-  const main = document.querySelector("main");
-  main.prepend(alert);
-  if (scroll) window.scrollTo(0, 0);
-}
+  }
